@@ -1,6 +1,12 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import MainLayout from "@/components/layouts/main-layout"
 import Container from "@/components/shared/container"
+import { Badge } from "@/components/ui/badge"
+import { DownloadIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { api } from "@/utils/api"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { AvatarImage } from "@radix-ui/react-avatar"
 import {
 	Select,
 	SelectContent,
@@ -8,63 +14,99 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card"
-import { DownloadIcon, EyeIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useSession } from "next-auth/react"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
 const Homepage = () => {
-	const session = useSession()
-	console.log(session)
+	const [batch, setBatch] = useState<string | undefined>("")
+	const [assignment, setAssignment] = useState<string | undefined>("")
+
+	const { data: batches } = api.assignmentJson.batches.useQuery()
+	const { data } = api.assignmentJson.all.useQuery({
+		batch,
+		assignment,
+	})
+
+	const availableAssignments =
+		batch && batches
+			? batches.find((b) => b.id === batch)?.Assignment || []
+			: []
+
+	useEffect(() => {
+		if (batch) {
+			setAssignment("")
+		}
+	}, [batch])
 	return (
 		<MainLayout>
 			<div className="mt-5">
 				<Container>
 					<div className="grid grid-cols-2 gap-5">
-						<Select>
+						<Select onValueChange={(val) => setBatch(val)}>
 							<SelectTrigger className="">
 								<SelectValue placeholder="Select Batch" />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="1">Batch 1</SelectItem>
-								<SelectItem value="2">Batch 2</SelectItem>
-								<SelectItem value="3">Batch 3</SelectItem>
+								{batches?.map((batch) => (
+									<SelectItem key={batch.id} value={batch.id}>
+										{batch.name}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
 
-						<Select>
-							<SelectTrigger className="">
-								<SelectValue placeholder="Select Assignment" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="1">Assignment 1</SelectItem>
-								<SelectItem value="2">Assignment 2</SelectItem>
-								<SelectItem value="3">Assignment 3</SelectItem>
-							</SelectContent>
-						</Select>
+						{batch && (
+							<Select
+								value={assignment}
+								onValueChange={(val) => setAssignment(val)}
+							>
+								<SelectTrigger className="">
+									<SelectValue placeholder="Select Assignment" />
+								</SelectTrigger>
+								<SelectContent>
+									{availableAssignments.map((aa) => (
+										<SelectItem key={aa.id} value={aa.id}>
+											{aa.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						)}
 					</div>
 
-					<div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-						<Card>
-							<CardContent className="pt-5">
-								<p>Card Content</p>
-							</CardContent>
-							<CardFooter className="flex justify-between">
-								<span className="flex items-center gap-2">0 Downloads</span>
+					<div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+						{data?.map((jsn) => (
+							<Card key={jsn.id}>
+								<CardHeader>
+									<div className="flex gap-2">
+										<Avatar className="w-5 h-5">
+											<AvatarImage src={jsn.user.image} />
+											<AvatarFallback>GH</AvatarFallback>
+										</Avatar>
 
-								<Button>
-									<DownloadIcon className="mr-2" size={15} />
-									DOwnload
-								</Button>
-							</CardFooter>
-						</Card>
+										<span>{jsn.user.name}</span>
+									</div>
+								</CardHeader>
+								<CardContent>
+									<div className="flex gap-2">
+										<Badge>{jsn.batch.name}</Badge>
+										<Badge variant="secondary">{jsn.assignment.name}</Badge>
+										{jsn.category && (
+											<Badge variant="outline">Category {jsn.category}</Badge>
+										)}
+									</div>
+								</CardContent>
+								<CardFooter className="flex justify-between">
+									<span className="flex items-center gap-2 text-muted-foreground text-sm">
+										{jsn.downloads} Downloads
+									</span>
+
+									<Button size="sm">
+										<DownloadIcon className="mr-2" size={15} />
+										Download
+									</Button>
+								</CardFooter>
+							</Card>
+						))}
 					</div>
 				</Container>
 			</div>
