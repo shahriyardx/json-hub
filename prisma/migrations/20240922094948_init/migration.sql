@@ -19,6 +19,17 @@ CREATE TABLE "Assignment" (
 );
 
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "providerAccountId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "AssignmentJson" (
     "id" TEXT NOT NULL,
     "batchId" TEXT NOT NULL,
@@ -37,3 +48,6 @@ ALTER TABLE "AssignmentJson" ADD CONSTRAINT "AssignmentJson_batchId_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "AssignmentJson" ADD CONSTRAINT "AssignmentJson_assignmentId_fkey" FOREIGN KEY ("assignmentId") REFERENCES "Assignment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AssignmentJson" ADD CONSTRAINT "AssignmentJson_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

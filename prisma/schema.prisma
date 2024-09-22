@@ -26,6 +26,16 @@ model Assignment {
     updatedAt      DateTime         @updatedAt
 }
 
+model User {
+    id                String @id @default(cuid())
+    providerAccountId String
+    name              String
+    email             String
+    image             String
+
+    AssignmentJson AssignmentJson[]
+}
+
 model AssignmentJson {
     id           String   @id @default(cuid())
     batchId      String
@@ -38,4 +48,5 @@ model AssignmentJson {
 
     batch      Batch      @relation(fields: [batchId], references: [id])
     assignment Assignment @relation(fields: [assignmentId], references: [id])
+    user       User       @relation(fields: [userId], references: [id])
 }
