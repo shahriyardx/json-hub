@@ -15,6 +15,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { download } from "@/utils/json"
+import { kebabCase } from "lodash"
 
 const Homepage = () => {
 	const [batch, setBatch] = useState<string | undefined>("")
@@ -100,7 +102,17 @@ const Homepage = () => {
 										{jsn.downloads} Downloads
 									</span>
 
-									<Button size="sm">
+									<Button
+										size="sm"
+										onClick={() =>
+											download(
+												jsn.data,
+												kebabCase(
+													`${jsn.batch.name} ${jsn.assignment.name} ${jsn.category ? `category ${jsn.category}` : ``}`,
+												),
+											)
+										}
+									>
 										<DownloadIcon className="mr-2" size={15} />
 										Download
 									</Button>
