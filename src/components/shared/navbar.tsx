@@ -2,7 +2,6 @@ import React from "react"
 import Container from "./container"
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { SiGithub } from "@icons-pack/react-simple-icons"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 import {
@@ -31,7 +30,7 @@ const Navbar = () => {
 
 	return (
 		<div>
-			<Container className="py-5 flex  items-center">
+			<Container className="py-5 flex items-center">
 				<span className="font-bold text-xl">
 					JSON<span className="text-normal">HUB</span>
 				</span>
@@ -50,7 +49,7 @@ const Navbar = () => {
 									asChild
 									className={navigationMenuTriggerStyle()}
 								>
-									<Link href="/">Create</Link>
+									<Link href="/create">Create</Link>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 						</NavigationMenuList>
@@ -78,7 +77,6 @@ const Navbar = () => {
 						</DropdownMenu>
 					) : (
 						<Button onClick={() => signIn("github")}>
-							<SiGithub size={15} className="mr-2" />
 							Sign In
 						</Button>
 					)}

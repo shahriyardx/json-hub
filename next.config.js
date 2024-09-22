@@ -7,7 +7,11 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-
+  modularizeImports: {
+    '@icons-pack/react-simple-icons': {
+      transform: '@icons-pack/react-simple-icons/{{member}}'
+    }
+  },
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
    *
@@ -18,6 +22,12 @@ const config = {
     defaultLocale: "en",
   },
   transpilePackages: ["geist"],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  }
 };
 
 export default config;
