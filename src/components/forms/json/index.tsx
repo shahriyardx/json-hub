@@ -1,6 +1,6 @@
 import React, { type RefObject } from "react"
 import type { AssignmentJSON } from "@/pages/create"
-import { useFieldArray, type UseFormReturn } from "react-hook-form"
+import type { UseFormReturn } from "react-hook-form"
 import { Form, FormMessage } from "@/components/ui/form"
 import Sections from "./sections"
 import { Button } from "@/components/ui/button"

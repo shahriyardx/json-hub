@@ -52,14 +52,14 @@ export const authOptions: NextAuthOptions = {
 
 				const exists = await db.user.findFirst({
 					where: {
-						providerAccountId: token.sub,
+						id: token.sub,
 					},
 				})
 
 				if (!exists) {
 					await db.user.create({
 						data: {
-							providerAccountId: token.sub as string,
+							id: token.sub as string,
 							name: userInfo.name,
 							image: userInfo.image,
 							email: user.email as string,

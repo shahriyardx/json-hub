@@ -1,4 +1,9 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
+import { JsonUploadSchema } from "@/components/forms/json-upload/types"
+import {
+	createTRPCRouter,
+	protectedProcedure,
+	publicProcedure,
+} from "@/server/api/trpc"
 import { z } from "zod"
 
 export const assignmentJsonRouter = createTRPCRouter({
@@ -37,5 +42,56 @@ export const assignmentJsonRouter = createTRPCRouter({
 			})
 
 			return data
+		}),
+	my: protectedProcedure.query(async ({ ctx }) => {
+		console.log(ctx.session.user.id)
+		const data = await ctx.db.assignmentJson.findMany({
+			where: { userId: ctx.session.user.id },
+			include: {
+				user: true,
+				assignment: true,
+				batch: true,
+			},
+		})
+
+		return data
+	}),
+	create: protectedProcedure
+		.input(JsonUploadSchema)
+		.mutation(async ({ ctx, input }) => {
+			await ctx.db.assignmentJson.create({
+				data: {
+					data: input.data,
+					batchId: input.batch,
+					assignmentId: input.assignment,
+					category: input.category,
+					userId: ctx.session.user.id,
+				},
+			})
+		}),
+	update: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				data: JsonUploadSchema,
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const data = input.data
+
+			console.log(input)
+
+			await ctx.db.assignmentJson.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					data: data.data,
+					batchId: data.batch,
+					assignmentId: data.assignment,
+					category: data.category,
+					userId: ctx.session.user.id,
+				},
+			})
 		}),
 })
