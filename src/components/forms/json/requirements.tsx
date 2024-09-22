@@ -51,9 +51,8 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 										size="icon"
 										variant="outline"
 										type="button"
-										onClick={() => {
-											swap(index, index - 1)
-										}}
+										disabled={!index}
+										onClick={() => swap(index, index - 1)}
 									>
 										<ChevronUp size={15} />
 									</Button>
@@ -62,9 +61,8 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 										size="icon"
 										variant="outline"
 										type="button"
-										onClick={() => {
-											swap(index, index + 1)
-										}}
+										disabled={index === fields.length - 1}
+										onClick={() => swap(index, index + 1)}
 									>
 										<ChevronDown size={15} />
 									</Button>
@@ -86,7 +84,7 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 
 									<FormField
 										control={form.control}
-										name={`sections.${sectionIndex}.requirements.${index}.data.marks`}
+										name={`sections.${sectionIndex}.requirements.${index}.data.number`}
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Marks</FormLabel>
@@ -130,7 +128,7 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 							<div className="mt-3">
 								<SubRequirements
 									form={form}
-									sectionIndex={index}
+									sectionIndex={sectionIndex}
 									requirementIndex={index}
 									key={req.id}
 								/>
@@ -145,9 +143,10 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 					append({
 						data: {
 							description: "",
-							marks: 0,
+							number: 0,
 							okayMessage: "okay",
 							notOkayMessage: "not okay",
+							correct: true,
 						},
 						subRequirements: [],
 					})

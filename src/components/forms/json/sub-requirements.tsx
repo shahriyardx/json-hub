@@ -80,7 +80,7 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 
 							<FormField
 								control={form.control}
-								name={`sections.${sectionIndex}.requirements.${requirementIndex}.subRequirements.${index}.marks`}
+								name={`sections.${sectionIndex}.requirements.${requirementIndex}.subRequirements.${index}.number`}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Marks</FormLabel>
@@ -128,7 +128,8 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 				onClick={() =>
 					append({
 						description: "",
-						marks: 0,
+						number: 0,
+						correct: true,
 						okayMessage: "okay",
 						notOkayMessage: "not okay",
 					})

@@ -76,9 +76,7 @@ const Navbar = () => {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					) : (
-						<Button onClick={() => signIn("github")}>
-							Sign In
-						</Button>
+						<Button onClick={() => signIn("github")}>Sign In</Button>
 					)}
 				</div>
 			</Container>

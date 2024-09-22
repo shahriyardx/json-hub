@@ -16,7 +16,8 @@
 			},
 			"style": {
 				"useSelfClosingElements": "off",
-				"noUnusedTemplateLiteral": "off"
+				"noUnusedTemplateLiteral": "off",
+				"noNonNullAssertion": "off"
 			},
 			"suspicious": {
 				"noArrayIndexKey": "off",
