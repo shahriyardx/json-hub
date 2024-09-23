@@ -124,23 +124,25 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 				))}
 			</div>
 
-			<Button
-				onClick={() =>
-					append({
-						description: "",
-						number: 0,
-						correct: true,
-						okayMessage: "okay",
-						notOkayMessage: "not okay",
-					})
-				}
-				variant="outline"
-				type="button"
-				size="sm"
-				className="mt-2"
-			>
-				Add Sub Requirement
-			</Button>
+			<div className="flex justify-end">
+				<Button
+					onClick={() =>
+						append({
+							description: "",
+							number: 0,
+							correct: true,
+							okayMessage: "okay",
+							notOkayMessage: "not okay",
+						})
+					}
+					variant="outline"
+					type="button"
+					size="sm"
+					className="mt-2"
+				>
+					Add Sub Requirement
+				</Button>
+			</div>
 		</div>
 	)
 }
