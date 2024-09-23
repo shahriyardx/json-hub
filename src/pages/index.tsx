@@ -11,13 +11,14 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { sortByName } from "@/utils/sort"
+import { Loader2 } from "lucide-react"
 
 const Homepage = () => {
 	const [batch, setBatch] = useState<string | undefined>("")
 	const [assignment, setAssignment] = useState<string | undefined>("")
 
 	const { data: batches } = api.batch.all.useQuery()
-	const { data, refetch } = api.assignmentJson.all.useQuery({
+	const { data, refetch, isLoading } = api.assignmentJson.all.useQuery({
 		batch,
 		assignment,
 	})
@@ -69,10 +70,22 @@ const Homepage = () => {
 						)}
 					</div>
 
-					<div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-						{data?.map((jsn) => (
-							<JsonCard json={jsn} key={jsn.id} onDownload={() => refetch()} />
-						))}
+					<div className="mt-10 ">
+						{isLoading && (
+							<div className="flex items-center justify-center">
+								<Loader2 className="animate-spin" />
+							</div>
+						)}
+
+						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+							{data?.map((jsn) => (
+								<JsonCard
+									json={jsn}
+									key={jsn.id}
+									onDownload={() => refetch()}
+								/>
+							))}
+						</div>
 					</div>
 				</Container>
 			</div>

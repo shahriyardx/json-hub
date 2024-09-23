@@ -6,14 +6,10 @@ import { signIn, signOut, useSession } from "next-auth/react"
 
 import {
 	NavigationMenu,
-	NavigationMenuContent,
-	NavigationMenuIndicator,
 	NavigationMenuItem,
 	NavigationMenuLink,
 	NavigationMenuList,
-	NavigationMenuTrigger,
 	navigationMenuTriggerStyle,
-	NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import {
 	DropdownMenu,
@@ -93,12 +89,12 @@ const Navbar = () => {
 						<Button onClick={() => signIn("github")}>Sign In</Button>
 					)}
 
-					<Button size="icon" variant="outline">
+					<Button size="icon" asChild>
 						<Link
 							href="https://github.com/shahriyardx/json-hub"
 							target="_blank"
 						>
-							<Github />
+							<Github size={18} />
 						</Link>
 					</Button>
 				</div>
