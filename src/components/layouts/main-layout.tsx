@@ -9,7 +9,7 @@ const MainLayout = ({ children, className }: Props) => {
 	return (
 		<div className={cn(className)}>
 			<Navbar />
-			<main>{children}</main>
+			<main className="min-h-[85vh]">{children}</main>
 			<Footer />
 		</div>
 	)
