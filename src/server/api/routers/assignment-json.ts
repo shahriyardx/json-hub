@@ -7,6 +7,18 @@ import {
 import { z } from "zod"
 
 export const assignmentJsonRouter = createTRPCRouter({
+	download: publicProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			await ctx.db.assignmentJson.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					downloads: { increment: 1 },
+				},
+			})
+		}),
 	delete: protectedProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
