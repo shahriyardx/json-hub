@@ -41,7 +41,7 @@ const Homepage = () => {
 	}, [batch])
 	return (
 		<MainLayout>
-			<div className="mt-5">
+			<div className="mt-5 mb-10">
 				<Container>
 					<div className="grid grid-cols-2 gap-5">
 						<Select onValueChange={(val) => setBatch(val)}>

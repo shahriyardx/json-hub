@@ -56,7 +56,7 @@ const CreateJson = () => {
 
 	return (
 		<MainLayout>
-			<Container className="mt-10">
+			<Container className="my-10">
 				<input
 					ref={importRef}
 					type="file"
