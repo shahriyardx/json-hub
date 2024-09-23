@@ -94,7 +94,15 @@ const Homepage = () => {
 										<Badge variant="secondary">{jsn.batch.name}</Badge>
 										<Badge variant="secondary">{jsn.assignment.name}</Badge>
 										{jsn.category && (
-											<Badge variant="outline">Category {jsn.category}</Badge>
+											<Badge variant="outline">
+												<span>
+													{jsn.category.toLowerCase().includes("category") ||
+													jsn.category.toLowerCase().includes("assignment")
+														? ""
+														: "Category "}
+												</span>
+												<span>{jsn.category}</span>
+											</Badge>
 										)}
 									</div>
 								</CardContent>
