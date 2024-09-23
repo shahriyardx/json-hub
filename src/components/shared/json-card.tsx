@@ -50,9 +50,11 @@ const JsonCard = ({ json, onDownload }: Props) => {
 						<Badge variant="outline">
 							<span>
 								{json.category.toLowerCase().includes("category") ||
-								json.category.toLowerCase().includes("assignment")
-									? ""
-									: "Category "}
+								json.category.toLowerCase().includes("assignment") ? (
+									""
+								) : (
+									<span>Category </span>
+								)}
 							</span>
 							<span>{json.category}</span>
 						</Badge>
