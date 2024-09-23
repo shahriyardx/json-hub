@@ -53,10 +53,10 @@ const JsonCard = ({ json, onDownload }: Props) => {
 								json.category.toLowerCase().includes("assignment") ? (
 									""
 								) : (
-									<span>Category </span>
+									<span>Category</span>
 								)}
 							</span>
-							<span>{json.category}</span>
+							<span> {json.category}</span>
 						</Badge>
 					)}
 				</div>
