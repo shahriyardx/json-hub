@@ -1,5 +1,5 @@
 import React from "react"
-import type { AssignmentJSON } from "@/pages/create"
+import type { AssignmentJSON } from "."
 import { useFieldArray, type UseFormReturn } from "react-hook-form"
 import {
 	FormControl,

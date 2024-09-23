@@ -16,12 +16,14 @@ declare module "next-auth" {
 		user: User & {
 			id: string
 		}
+		isAdmin: boolean
 	}
 }
 
 declare module "next-auth/jwt" {
 	interface JWT extends DefaultJWT {
 		user: User
+		isAdmin: boolean
 	}
 }
 
@@ -33,11 +35,16 @@ export const authOptions: NextAuthOptions = {
 		session: ({ session, token }) => ({
 			...session,
 			user: token.user,
+			isAdmin: token.isAdmin,
 		}),
 		jwt: async ({ token, account, user }) => {
 			if (account && user) {
 				const response = await fetch(`https://api.github.com/user/${token.sub}`)
 				const data = await response.json()
+				console.log(token.sub)
+				if (token.sub === "40076722") {
+					token.isAdmin = true
+				}
 
 				const userInfo = {
 					id: String(data.id),

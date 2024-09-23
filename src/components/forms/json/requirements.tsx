@@ -1,11 +1,5 @@
 import React from "react"
-import type { AssignmentJSON } from "@/pages/create"
-import {
-	useFieldArray,
-	type UseFieldArrayReturn,
-	type FieldArrayWithId,
-	type UseFormReturn,
-} from "react-hook-form"
+import { useFieldArray, type UseFormReturn } from "react-hook-form"
 import {
 	FormControl,
 	FormField,
@@ -17,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import SubRequirements from "./sub-requirements"
+import type { AssignmentJSON } from "."
 
 type Props = {
 	form: UseFormReturn<AssignmentJSON>

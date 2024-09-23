@@ -1,5 +1,5 @@
 import React from "react"
-import type { AssignmentJSON } from "@/pages/create"
+import type { AssignmentJSON } from "."
 import { useFieldArray, type UseFormReturn } from "react-hook-form"
 import {
 	FormControl,
@@ -44,7 +44,10 @@ const Sections = ({ form }: Props) => {
 
 			<div className="space-y-5">
 				{fields.map((section, index) => (
-					<div key={section.id} className="rounded-md border p-5 relative group">
+					<div
+						key={section.id}
+						className="rounded-md border p-5 relative group"
+					>
 						<Button
 							onClick={() => remove(index)}
 							size="icon"

@@ -1,6 +1,5 @@
-import React, { type RefObject } from "react"
-import type { AssignmentJSON } from "@/pages/create"
-import type { UseFormReturn } from "react-hook-form"
+import React, { useRef } from "react"
+import { useForm } from "react-hook-form"
 import { Form, FormMessage } from "@/components/ui/form"
 import Sections from "./sections"
 import { Button } from "@/components/ui/button"
@@ -13,14 +12,46 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { download, toLegacy } from "@/utils/json"
+import { download, getJsonData, loadJson, toLegacy } from "@/utils/json"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-type Props = {
-	form: UseFormReturn<AssignmentJSON>
-	importRef: RefObject<HTMLInputElement>
-}
 
-const JSONForm = ({ form, importRef }: Props) => {
+export const jsonSchema = z.object({
+	highestMark: z.coerce.number().default(60),
+	include: z.boolean().default(true),
+	sections: z.array(
+		z.object({
+			name: z.string(),
+			requirements: z
+				.array(
+					z.object({
+						data: z.object({
+							description: z.string(),
+							number: z.coerce.number(),
+							correct: z.boolean().default(true),
+							okayMessage: z.string().default("okay"),
+							notOkayMessage: z.string().default("not okay"),
+						}),
+						subRequirements: z.array(
+							z.object({
+								description: z.string(),
+								number: z.coerce.number(),
+								correct: z.boolean().default(true),
+								okayMessage: z.string().default("okay"),
+								notOkayMessage: z.string().default("not okay"),
+							}),
+						),
+					}),
+				)
+				.default([]),
+		}),
+	),
+})
+
+export type AssignmentJSON = z.infer<typeof jsonSchema>
+
+const JSONForm = () => {
 	const downloadJson = (data: AssignmentJSON) => {
 		if (data.include) {
 			download(toLegacy(data), "")
@@ -35,8 +66,40 @@ const JSONForm = ({ form, importRef }: Props) => {
 		}
 	}
 
+	const importRef = useRef<HTMLInputElement>(null)
+	const form = useForm<z.infer<typeof jsonSchema>>({
+		resolver: zodResolver(jsonSchema),
+		reValidateMode: "onChange",
+		shouldUnregister: true,
+		defaultValues: {
+			include: true,
+		},
+	})
+
 	return (
 		<div>
+			<input
+				ref={importRef}
+				type="file"
+				accept="application/json"
+				onChange={(e) => {
+					const file = e.target.files?.[0]
+					if (file) {
+						loadJson({
+							file,
+							onload: (data) => {
+								const jsonData = getJsonData(data)
+								const validated_data = jsonSchema.safeParse(jsonData)
+
+								if (validated_data.success) {
+									form.reset(validated_data.data)
+								}
+							},
+						})
+					}
+				}}
+				className="hidden"
+			/>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(downloadJson)} className="space-y-5">
 					<Sections form={form} />
