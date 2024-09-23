@@ -1,4 +1,4 @@
-import type { AssignmentJSON } from "@/pages/create"
+import type { AssignmentJSON } from "@/components/forms/json"
 
 type Req = {
 	description: string
