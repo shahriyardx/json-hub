@@ -9,14 +9,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table"
-import {
 	AlertDialog,
 	AlertDialogAction,
 	AlertDialogCancel,
@@ -35,15 +27,23 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 import { sortByName } from "@/utils/sort"
+import {
+	type ColumnDef,
+	getCoreRowModel,
+	getFilteredRowModel,
+	useReactTable,
+} from "@tanstack/react-table"
+import { DataTable } from "@/components/ui/data-table"
+import type { Assignment, Batch } from "@prisma/client"
 
 export const batchScheama = z.object({
 	name: z.string().min(1),
 })
 
-export type Batch = z.infer<typeof batchScheama>
+export type BatchData = z.infer<typeof batchScheama>
 
 const Bathces = () => {
-	const form = useForm<Batch>({
+	const form = useForm<BatchData>({
 		resolver: zodResolver(batchScheama),
 	})
 	const { data: batches, refetch } = api.batch.all.useQuery()
@@ -63,6 +63,55 @@ const Bathces = () => {
 			toast.success("Batch deleted")
 			refetch()
 		},
+	})
+
+	const columns: ColumnDef<Batch & { Assignment: Assignment[] }>[] = [
+		{
+			accessorKey: "name",
+			header: "Name",
+		},
+		{
+			header: "Assignments",
+			cell: ({ row }) => {
+				return <span>{row.original.Assignment.length}</span>
+			},
+		},
+		{
+			header: "Actions",
+			cell: ({ row }) => {
+				return (
+					<AlertDialog>
+						<AlertDialogTrigger asChild>
+							<Button variant="destructive">Delete</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will permanently delete the
+									batch and all associated assignment and json data with it
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									onClick={() => deleteBatch({ id: row.original.id })}
+								>
+									Confirm
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+				)
+			},
+		},
+	]
+
+	const table = useReactTable({
+		columns,
+		data: batches?.sort(sortByName) ?? [],
+		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 	})
 
 	return (
@@ -93,51 +142,8 @@ const Bathces = () => {
 			</fieldset>
 
 			<div className="mt-10">
-				<h4 className="text-xl font-bold">All Batches</h4>
-				<Table className="mt-2">
-					<TableHeader>
-						<TableRow className="bg-secondary">
-							<TableHead>Name</TableHead>
-							<TableHead>Assignments</TableHead>
-							<TableHead>Actions</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{batches?.sort(sortByName).map((b) => (
-							<TableRow key={b.id}>
-								<TableCell>{b.name}</TableCell>
-								<TableCell>{b.Assignment.length}</TableCell>
-								<TableCell>
-									<AlertDialog>
-										<AlertDialogTrigger>
-											<Button variant="destructive">Delete</Button>
-										</AlertDialogTrigger>
-										<AlertDialogContent>
-											<AlertDialogHeader>
-												<AlertDialogTitle>
-													Are you absolutely sure?
-												</AlertDialogTitle>
-												<AlertDialogDescription>
-													This action cannot be undone. This will permanently
-													delete the batch and all associated assignment and
-													json data with it
-												</AlertDialogDescription>
-											</AlertDialogHeader>
-											<AlertDialogFooter>
-												<AlertDialogCancel>Cancel</AlertDialogCancel>
-												<AlertDialogAction
-													onClick={() => deleteBatch({ id: b.id })}
-												>
-													Confirm
-												</AlertDialogAction>
-											</AlertDialogFooter>
-										</AlertDialogContent>
-									</AlertDialog>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+				<h4 className="text-xl font-bold mb-2">All Batches</h4>
+				<DataTable table={table} />
 			</div>
 		</DashboardLayout>
 	)

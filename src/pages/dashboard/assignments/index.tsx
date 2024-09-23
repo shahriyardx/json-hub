@@ -9,14 +9,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table"
-import {
 	AlertDialog,
 	AlertDialogAction,
 	AlertDialogCancel,
@@ -42,16 +34,24 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 import { sortByName } from "@/utils/sort"
+import {
+	type ColumnDef,
+	getCoreRowModel,
+	getFilteredRowModel,
+	useReactTable,
+} from "@tanstack/react-table"
+import type { Assignment, Batch } from "@prisma/client"
+import { DataTable } from "@/components/ui/data-table"
 
 export const assignmentScheama = z.object({
 	name: z.string().min(1),
 	batch: z.string(),
 })
 
-export type Assignment = z.infer<typeof assignmentScheama>
+export type AssignmentData = z.infer<typeof assignmentScheama>
 
 const Assignments = () => {
-	const form = useForm<Assignment>({
+	const form = useForm<AssignmentData>({
 		resolver: zodResolver(assignmentScheama),
 	})
 
@@ -73,6 +73,65 @@ const Assignments = () => {
 		onSuccess: () => {
 			toast.success("Assignment deleted")
 			refetch()
+		},
+	})
+
+	const columns: ColumnDef<Assignment & { batch: Batch }>[] = [
+		{
+			accessorKey: "name",
+			header: "Name",
+		},
+		{
+			accessorKey: "batchId",
+		},
+		{
+			accessorKey: "batch",
+			header: "Batch",
+			cell: ({ row }) => {
+				return row.original.batch.name
+			},
+		},
+		{
+			header: "Actions",
+			cell: ({ row }) => {
+				return (
+					<div className="flex gap-2">
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button variant="destructive">Delete</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. This will permanently delete
+										this json.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogAction
+										onClick={() => deleteAssignment({ id: row.original.id })}
+									>
+										Continue
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
+					</div>
+				)
+			},
+		},
+	]
+	const table = useReactTable({
+		columns,
+		data: assignments?.sort(sortByName) ?? [],
+		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		state: {
+			columnVisibility: {
+				batchId: false,
+			},
 		},
 	})
 
@@ -137,49 +196,28 @@ const Assignments = () => {
 
 			<div className="mt-10">
 				<h4 className="text-xl font-bold">All Assignments</h4>
-				<Table className="mt-2">
-					<TableHeader>
-						<TableRow className="bg-secondary">
-							<TableHead>Name</TableHead>
-							<TableHead>Batch</TableHead>
-							<TableHead>Actions</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{assignments?.sort(sortByName).map((b) => (
-							<TableRow key={b.id}>
-								<TableCell>{b.name}</TableCell>
-								<TableCell>{b.batch.name}</TableCell>
-								<TableCell>
-									<AlertDialog>
-										<AlertDialogTrigger>
-											<Button variant="destructive">Delete</Button>
-										</AlertDialogTrigger>
-										<AlertDialogContent>
-											<AlertDialogHeader>
-												<AlertDialogTitle>
-													Are you absolutely sure?
-												</AlertDialogTitle>
-												<AlertDialogDescription>
-													This action cannot be undone. This will permanently
-													delete this assignment and all associated json of it.
-												</AlertDialogDescription>
-											</AlertDialogHeader>
-											<AlertDialogFooter>
-												<AlertDialogCancel>Cancel</AlertDialogCancel>
-												<AlertDialogAction
-													onClick={() => deleteAssignment({ id: b.id })}
-												>
-													Confirm
-												</AlertDialogAction>
-											</AlertDialogFooter>
-										</AlertDialogContent>
-									</AlertDialog>
-								</TableCell>
-							</TableRow>
+				<Select
+					onValueChange={(val) => {
+						if (val === "all") {
+							table.getColumn("batchId")?.setFilterValue(undefined)
+						} else {
+							table.getColumn("batchId")?.setFilterValue(val)
+						}
+					}}
+				>
+					<SelectTrigger className="my-4">
+						<SelectValue placeholder="Select Batch" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="all">All</SelectItem>
+						{batches?.map((batch) => (
+							<SelectItem value={batch.id} key={batch.id}>
+								{batch.name}
+							</SelectItem>
 						))}
-					</TableBody>
-				</Table>
+					</SelectContent>
+				</Select>
+				<DataTable table={table} />
 			</div>
 		</DashboardLayout>
 	)

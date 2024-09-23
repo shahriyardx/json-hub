@@ -1,3 +1,5 @@
+import type { Assignment, AssignmentJson, Batch, User } from "@prisma/client"
+
 export type BaseRequirement = {
 	description: string
 	number: string
@@ -19,4 +21,10 @@ export type JsonForm = {
 	sections: Array<JsonSection>
 	highestMark: number
 	include: boolean
+}
+
+export type JsonResponse = AssignmentJson & {
+	batch: Batch
+	assignment: Assignment
+	user: User
 }
