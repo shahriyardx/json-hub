@@ -37,14 +37,14 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 				{fields.map((req, index) => (
 					<div
 						key={req.id}
-						className="grid grid-cols-[60px_auto] rounded-md border p-5 relative bg-secondary/20"
+						className="grid grid-cols-[60px_auto] rounded-md border p-5 relative bg-secondary/20 group/sub"
 					>
 						<Button
 							onClick={() => remove(index)}
 							size="icon"
 							variant="destructive"
 							type="button"
-							className="absolute top-0 right-0 rounded-md rounded-bl-full"
+							className="absolute top-0 right-0 rounded-md rounded-bl-full hidden group-hover/sub:flex"
 						>
 							<Trash size={15} className="-mt-2 ml-1" />
 						</Button>

@@ -44,12 +44,12 @@ const Sections = ({ form }: Props) => {
 
 			<div className="space-y-5">
 				{fields.map((section, index) => (
-					<div key={section.id} className="rounded-md border p-5 relative">
+					<div key={section.id} className="rounded-md border p-5 relative group">
 						<Button
 							onClick={() => remove(index)}
 							size="icon"
 							variant="destructive"
-							className="absolute top-0 right-0 rounded-md rounded-bl-full"
+							className="absolute top-0 right-0 rounded-md rounded-bl-full hidden group-hover:flex"
 						>
 							<Trash size={15} className="-mt-2 ml-1" />
 						</Button>

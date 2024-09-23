@@ -35,13 +35,13 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 			<div className="mt-2 space-y-5">
 				{fields.map((req, index) => (
 					<div key={req.id}>
-						<div className="rounded-md border p-5 relative bg-secondary/20">
+						<div className="rounded-md border p-5 relative bg-secondary/20 group/req">
 							<Button
 								onClick={() => remove(index)}
 								size="icon"
 								variant="destructive"
 								type="button"
-								className="absolute top-0 right-0 rounded-md rounded-bl-full"
+								className="absolute top-0 right-0 rounded-md rounded-bl-full hidden group-hover/req:flex"
 							>
 								<Trash size={15} className="-mt-2 ml-1" />
 							</Button>
