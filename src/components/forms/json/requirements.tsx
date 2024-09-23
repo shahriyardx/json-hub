@@ -14,7 +14,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { ChevronDown, ChevronUp, Trash } from "lucide-react"
+import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import SubRequirements from "./sub-requirements"
 
@@ -125,14 +125,12 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 									/>
 								</div>
 							</div>
-							<div className="mt-3">
-								<SubRequirements
-									form={form}
-									sectionIndex={sectionIndex}
-									requirementIndex={index}
-									key={req.id}
-								/>
-							</div>
+							<SubRequirements
+								form={form}
+								sectionIndex={sectionIndex}
+								requirementIndex={index}
+								key={req.id}
+							/>
 						</div>
 					</div>
 				))}
@@ -154,9 +152,9 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 				variant="secondary"
 				type="button"
 				size="sm"
-				className="mt-5"
+				className="mt-3"
 			>
-				Add Requirement
+				<Plus size={15} className="mr-2" /> Requirement
 			</Button>
 		</div>
 	)

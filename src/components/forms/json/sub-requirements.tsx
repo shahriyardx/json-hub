@@ -9,8 +9,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { ChevronDown, ChevronUp, Trash } from "lucide-react"
+import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 type Props = {
 	form: UseFormReturn<AssignmentJSON>
@@ -25,13 +26,18 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 	})
 
 	return (
-		<div>
+		<div className={cn(fields.length > 0 ? "mt-3" : "")}>
 			{fields.length > 0 && <p>Sub Requirements</p>}
-			<div className="mt-2 pl-5 border-l-2">
+			<div
+				className={cn(
+					"pl-5 border-l-2 border-zinc-500 space-y-2",
+					fields.length > 0 ? "mt-2" : "",
+				)}
+			>
 				{fields.map((req, index) => (
 					<div
 						key={req.id}
-						className="mt-2 grid grid-cols-[60px_auto] rounded-md border p-5 relative bg-secondary/20"
+						className="grid grid-cols-[60px_auto] rounded-md border p-5 relative bg-secondary/20"
 					>
 						<Button
 							onClick={() => remove(index)}
@@ -124,7 +130,7 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 				))}
 			</div>
 
-			<div className="flex justify-end">
+			<div className={cn("flex justify-end", fields.length > 0 ? "mt-2" : "")}>
 				<Button
 					onClick={() =>
 						append({
@@ -138,9 +144,8 @@ const SubRequirement = ({ form, sectionIndex, requirementIndex }: Props) => {
 					variant="outline"
 					type="button"
 					size="sm"
-					className="mt-2"
 				>
-					Add Sub Requirement
+					<Plus size={15} className="mr-2" /> Sub Requirement
 				</Button>
 			</div>
 		</div>

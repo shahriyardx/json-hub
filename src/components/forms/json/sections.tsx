@@ -58,7 +58,6 @@ const Sections = ({ form }: Props) => {
 							name={`sections.${index}.name`}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Section Name</FormLabel>
 									<FormControl>
 										<Input placeholder="Section Name" {...field} />
 									</FormControl>
