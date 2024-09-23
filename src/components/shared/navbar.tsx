@@ -24,6 +24,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Github } from "lucide-react"
 
 const Navbar = () => {
 	const { data: session } = useSession()
@@ -50,6 +51,17 @@ const Navbar = () => {
 									className={navigationMenuTriggerStyle()}
 								>
 									<Link href="/create">Create</Link>
+								</NavigationMenuLink>
+								<NavigationMenuLink
+									asChild
+									className={navigationMenuTriggerStyle()}
+								>
+									<Link
+										href="https://github.com/shahriyardx/assignment-checker/releases/latest"
+										target="_blank"
+									>
+										Extension
+									</Link>
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 						</NavigationMenuList>
@@ -80,6 +92,15 @@ const Navbar = () => {
 					) : (
 						<Button onClick={() => signIn("github")}>Sign In</Button>
 					)}
+
+					<Button size="icon" variant="outline">
+						<Link
+							href="https://github.com/shahriyardx/json-hub"
+							target="_blank"
+						>
+							<Github />
+						</Link>
+					</Button>
 				</div>
 			</Container>
 		</div>
