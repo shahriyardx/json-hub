@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import type { GetServerSideProps } from "next"
 import React from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 const DashboardPage = ({ data }: { data: JsonUpload }) => {
 	const { jsonId } = useParams<{ jsonId: string }>()
@@ -22,7 +23,11 @@ const DashboardPage = ({ data }: { data: JsonUpload }) => {
 		},
 	})
 
-	const { mutate: updateJson } = api.assignmentJson.update.useMutation()
+	const { mutate: updateJson } = api.assignmentJson.update.useMutation({
+		onSuccess: () => {
+			toast.success("JSON updated")
+		},
+	})
 
 	return (
 		<DashboardLayout title="Add JSON">

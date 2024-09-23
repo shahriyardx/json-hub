@@ -58,7 +58,9 @@ const Assignments = () => {
 	const { data: assignments, refetch } = api.assignment.all.useQuery()
 	const { mutate: createAssignment } = api.assignment.create.useMutation({
 		onSuccess: () => {
+			const values = form.getValues()
 			form.reset({
+				...values,
 				name: "",
 			})
 			toast.success("Assignment created")
@@ -68,7 +70,6 @@ const Assignments = () => {
 
 	const { mutate: deleteAssignment } = api.assignment.delete.useMutation({
 		onSuccess: () => {
-			form.reset()
 			toast.success("Assignment deleted")
 			refetch()
 		},

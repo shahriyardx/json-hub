@@ -1,7 +1,7 @@
 import { api } from "@/utils/api"
 import React, { type ComponentProps, useEffect, useRef } from "react"
 import type { UseFormReturn } from "react-hook-form"
-import { z } from "zod"
+import { isValid, z } from "zod"
 import {
 	Form,
 	FormControl,
@@ -41,10 +41,21 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 			: []
 
 	useEffect(() => {
-		if (batch && type === "create") {
-			form.setValue("assignment", "")
+		if (batch) {
+			const selectedAssignment = form.getValues("assignment")
+			const isAvailable = availableAssignments.find(
+				(a) => a.id === selectedAssignment,
+			)
+
+			if (!isAvailable) {
+				form.setValue("assignment", "")
+			} else {
+				form.setValue("assignment", isAvailable.id)
+			}
 		}
-	}, [batch, type, form.setValue])
+
+		console.log("Rerendering")
+	}, [batch, form.setValue, availableAssignments, form.getValues])
 
 	return (
 		<div className={className}>
@@ -58,7 +69,10 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 						loadJson({
 							file,
 							onload: (data) => {
+								const values = form.getValues()
+
 								form.reset({
+									...values,
 									data: JSON.stringify(data, undefined, 4),
 								})
 							},
@@ -68,7 +82,12 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 				className="hidden"
 			/>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit((values) => submitHandler(values))}>
+				<form
+					onSubmit={form.handleSubmit((values) => {
+						console.log(values)
+						submitHandler(values)
+					})}
+				>
 					<div className="grid grid-cols-3 gap-5">
 						<FormField
 							control={form.control}
@@ -154,7 +173,7 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 							name="data"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Bio</FormLabel>
+									<FormLabel>JSON Data</FormLabel>
 									<FormControl>
 										<Textarea
 											rows={20}

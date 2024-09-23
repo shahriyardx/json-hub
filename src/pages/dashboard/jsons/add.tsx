@@ -16,9 +16,10 @@ const DashboardPage = () => {
 	})
 	const { mutate: uploadJson } = api.assignmentJson.create.useMutation({
 		onSuccess: () => {
+			const values = form.getValues()
 			form.reset({
-				batch: "",
-				assignment: "",
+				...values,
+				data: "",
 			})
 
 			toast.success("JSON has been uploaded")
