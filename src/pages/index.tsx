@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import MainLayout from "@/components/layouts/main-layout"
 import Container from "@/components/shared/container"
 import { Badge } from "@/components/ui/badge"
-import { DownloadIcon } from "lucide-react"
+import { DownloadIcon, Link } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { api } from "@/utils/api"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -17,12 +17,13 @@ import {
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { download } from "@/utils/json"
 import { kebabCase } from "lodash"
+import { toast } from "sonner"
 
 const Homepage = () => {
 	const [batch, setBatch] = useState<string | undefined>("")
 	const [assignment, setAssignment] = useState<string | undefined>("")
 
-	const { data: batches } = api.assignmentJson.batches.useQuery()
+	const { data: batches } = api.batch.all.useQuery()
 	const { data } = api.assignmentJson.all.useQuery({
 		batch,
 		assignment,
@@ -102,20 +103,34 @@ const Homepage = () => {
 										{jsn.downloads} Downloads
 									</span>
 
-									<Button
-										size="sm"
-										onClick={() =>
-											download(
-												jsn.data,
-												kebabCase(
-													`${jsn.batch.name} ${jsn.assignment.name} ${jsn.category ? `category ${jsn.category}` : ``}`,
-												),
-											)
-										}
-									>
-										<DownloadIcon className="mr-2" size={15} />
-										Download
-									</Button>
+									<div className="flex gap-2 items-center">
+										<Button
+											size="sm"
+											onClick={() =>
+												download(
+													jsn.data,
+													kebabCase(
+														`${jsn.batch.name} ${jsn.assignment.name} ${jsn.category ? `category ${jsn.category}` : ``}`,
+													),
+												)
+											}
+										>
+											<DownloadIcon className="mr-2" size={15} />
+											Download
+										</Button>
+										<Button
+											size="icon"
+											variant="secondary"
+											onClick={() => {
+												window.navigator.clipboard.writeText(
+													`${window.location.origin}/api/json/${jsn.id}`,
+												)
+												toast.success("Link copied to clipboard")
+											}}
+										>
+											<Link size={15} />
+										</Button>
+									</div>
 								</CardFooter>
 							</Card>
 						))}

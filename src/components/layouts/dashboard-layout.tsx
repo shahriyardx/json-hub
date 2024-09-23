@@ -1,4 +1,4 @@
-import React, { type ReactNode, type ComponentProps, act } from "react"
+import React, { type ReactNode, type ComponentProps } from "react"
 import Container from "../shared/container"
 import type { LinkProps } from "next/link"
 import Link from "next/link"
@@ -27,10 +27,10 @@ const DashboardLayout = ({ children, title }: Props) => {
 				</div>
 
 				<div className="mt-5">
-					<SidebarLink href="/dashboard/json" Icon={Braces}>
+					<SidebarLink href="/dashboard/jsons" Icon={Braces}>
 						JSON
 					</SidebarLink>
-					<SidebarLink href="/dashboard/json/add" Icon={Plus}>
+					<SidebarLink href="/dashboard/jsons/add" Icon={Plus}>
 						Add JSON
 					</SidebarLink>
 					<SidebarLink href="/dashboard/batches" Icon={ListIcon}>
@@ -69,8 +69,10 @@ const SidebarLink = ({ href, children, Icon }: SidebarLinkProps) => {
 			className="rounded-none w-full justify-start"
 		>
 			<Link href={href}>
-				<Icon size={15} className="mr-2" />
-				{children}
+				<>
+					<Icon size={15} className="mr-2" />
+					{children}
+				</>
 			</Link>
 		</Button>
 	)

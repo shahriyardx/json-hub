@@ -13,7 +13,6 @@ import React from "react"
 import { useForm } from "react-hook-form"
 
 const DashboardPage = ({ data }: { data: JsonUpload }) => {
-	console.log(data)
 	const { jsonId } = useParams<{ jsonId: string }>()
 	const form = useForm<JsonUpload>({
 		resolver: zodResolver(JsonUploadSchema),
@@ -28,6 +27,7 @@ const DashboardPage = ({ data }: { data: JsonUpload }) => {
 	return (
 		<DashboardLayout title="Add JSON">
 			<JsonUploadForm
+				type="update"
 				form={form}
 				submitHandler={(data) =>
 					updateJson({

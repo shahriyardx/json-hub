@@ -7,11 +7,16 @@ import {
 import { z } from "zod"
 
 export const assignmentJsonRouter = createTRPCRouter({
-	batches: publicProcedure.query(async ({ ctx }) => {
-		const data = await ctx.db.batch.findMany({ include: { Assignment: true } })
-		return data
-	}),
-
+	delete: protectedProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			await ctx.db.assignmentJson.delete({
+				where: {
+					id: input.id,
+					userId: ctx.session.user.id,
+				},
+			})
+		}),
 	all: publicProcedure
 		.input(
 			z.object({
@@ -78,8 +83,6 @@ export const assignmentJsonRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			const data = input.data
-
-			console.log(input)
 
 			await ctx.db.assignmentJson.update({
 				where: {

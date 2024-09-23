@@ -26,27 +26,25 @@ import type { JsonUpload } from "./types"
 type Props = ComponentProps<"div"> & {
 	submitHandler: (values: JsonUpload) => void
 	form: UseFormReturn<JsonUpload>
+	type: "create" | "update"
 }
 
-const JsonUploadForm = ({ className, submitHandler, form }: Props) => {
+const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 	const importRef = useRef<HTMLInputElement>(null)
 
-	const batch = form.watch("batch")
-	const assignment = form.watch("assignment")
+	const { data: batches } = api.batch.all.useQuery()
 
-	const { data: batches } = api.assignmentJson.batches.useQuery()
+	const batch = form.watch("batch")
 	const availableAssignments =
 		batch && batches
 			? batches.find((b) => b.id === batch)?.Assignment || []
 			: []
 
 	useEffect(() => {
-		const has = availableAssignments.find((ass) => ass.id === assignment)
-
-		if (!has) {
+		if (batch && type === "create") {
 			form.setValue("assignment", "")
 		}
-	}, [availableAssignments, assignment, form.setValue])
+	}, [batch, type, form.setValue])
 
 	return (
 		<div className={className}>

@@ -66,7 +66,9 @@ const Navbar = () => {
 							<DropdownMenuContent>
 								<DropdownMenuLabel>My Account</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem>Dashboard</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link href="/dashboard/jsons">Dashboard</Link>
+								</DropdownMenuItem>
 								<DropdownMenuItem
 									className="bg-destructive"
 									onSelect={() => signOut()}
