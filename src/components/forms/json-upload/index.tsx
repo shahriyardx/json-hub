@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { loadJson } from "@/utils/json"
 import type { JsonUpload } from "./types"
+import { sortByName } from "@/utils/sort"
 
 type Props = ComponentProps<"div"> & {
 	submitHandler: (values: JsonUpload) => void
@@ -105,7 +106,7 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											{batches?.map((b) => (
+											{batches?.sort(sortByName).map((b) => (
 												<SelectItem key={b.id} value={b.id}>
 													{b.name}
 												</SelectItem>
@@ -134,7 +135,7 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 										</FormControl>
 										<SelectContent>
 											<SelectContent>
-												{availableAssignments?.map((b) => (
+												{availableAssignments?.sort(sortByName).map((b) => (
 													<SelectItem key={b.id} value={b.id}>
 														{b.name}
 													</SelectItem>

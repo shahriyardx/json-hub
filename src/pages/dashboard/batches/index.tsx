@@ -34,6 +34,7 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
+import { sortByName } from "@/utils/sort"
 
 export const batchScheama = z.object({
 	name: z.string().min(1),
@@ -102,7 +103,7 @@ const Bathces = () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{batches?.map((b) => (
+						{batches?.sort(sortByName).map((b) => (
 							<TableRow key={b.id}>
 								<TableCell>{b.name}</TableCell>
 								<TableCell>{b.Assignment.length}</TableCell>

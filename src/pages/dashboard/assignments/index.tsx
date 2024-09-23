@@ -41,6 +41,7 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
+import { sortByName } from "@/utils/sort"
 
 export const assignmentScheama = z.object({
 	name: z.string().min(1),
@@ -101,7 +102,7 @@ const Assignments = () => {
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent>
-													{batches?.map((b) => (
+													{batches?.sort(sortByName).map((b) => (
 														<SelectItem key={b.id} value={b.id}>
 															{b.name}
 														</SelectItem>
@@ -145,7 +146,7 @@ const Assignments = () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{assignments?.map((b) => (
+						{assignments?.sort(sortByName).map((b) => (
 							<TableRow key={b.id}>
 								<TableCell>{b.name}</TableCell>
 								<TableCell>{b.batch.name}</TableCell>

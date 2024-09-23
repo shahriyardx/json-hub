@@ -10,6 +10,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { sortByName } from "@/utils/sort"
 
 const Homepage = () => {
 	const [batch, setBatch] = useState<string | undefined>("")
@@ -41,7 +42,7 @@ const Homepage = () => {
 								<SelectValue placeholder="Select Batch" />
 							</SelectTrigger>
 							<SelectContent>
-								{batches?.map((batch) => (
+								{batches?.sort(sortByName).map((batch) => (
 									<SelectItem key={batch.id} value={batch.id}>
 										{batch.name}
 									</SelectItem>
