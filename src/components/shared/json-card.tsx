@@ -47,7 +47,7 @@ const JsonCard = ({ json, onDownload }: Props) => {
 					<Badge variant="secondary">{json.batch.name}</Badge>
 					<Badge variant="secondary">{json.assignment.name}</Badge>
 					{json.category && (
-						<Badge variant="outline">
+						<Badge>
 							<span>
 								{json.category.toLowerCase().includes("category") ||
 								json.category.toLowerCase().includes("assignment")
