@@ -91,7 +91,7 @@ const Homepage = () => {
 								</CardHeader>
 								<CardContent>
 									<div className="flex gap-2">
-										<Badge>{jsn.batch.name}</Badge>
+										<Badge variant="secondary">{jsn.batch.name}</Badge>
 										<Badge variant="secondary">{jsn.assignment.name}</Badge>
 										{jsn.category && (
 											<Badge variant="outline">Category {jsn.category}</Badge>
@@ -106,6 +106,7 @@ const Homepage = () => {
 									<div className="flex gap-2 items-center">
 										<Button
 											size="sm"
+											variant="secondary"
 											onClick={() =>
 												download(
 													jsn.data,
@@ -120,7 +121,7 @@ const Homepage = () => {
 										</Button>
 										<Button
 											size="icon"
-											variant="secondary"
+											variant="outline"
 											onClick={() => {
 												window.navigator.clipboard.writeText(
 													`${window.location.origin}/api/json/${jsn.id}`,
