@@ -9,7 +9,12 @@ import { z } from "zod"
 
 export const assignmentRouter = createTRPCRouter({
 	all: publicProcedure.query(async ({ ctx }) => {
-		const data = await ctx.db.assignment.findMany({ include: { batch: true } })
+		const data = await ctx.db.assignment.findMany({
+			include: { batch: true },
+			orderBy: {
+				createdAt: "desc",
+			},
+		})
 		return data
 	}),
 	create: protectedProcedure

@@ -8,7 +8,12 @@ import { z } from "zod"
 
 export const batchRouter = createTRPCRouter({
 	all: publicProcedure.query(async ({ ctx }) => {
-		const data = await ctx.db.batch.findMany({ include: { Assignment: true } })
+		const data = await ctx.db.batch.findMany({
+			include: { Assignment: true },
+			orderBy: {
+				createdAt: "desc",
+			},
+		})
 		return data
 	}),
 	create: protectedProcedure

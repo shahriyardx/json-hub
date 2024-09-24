@@ -56,6 +56,9 @@ export const assignmentJsonRouter = createTRPCRouter({
 					assignment: true,
 					batch: true,
 				},
+				orderBy: {
+					createdAt: "desc",
+				},
 			})
 
 			return data
@@ -68,6 +71,9 @@ export const assignmentJsonRouter = createTRPCRouter({
 				user: true,
 				assignment: true,
 				batch: true,
+			},
+			orderBy: {
+				createdAt: "desc",
 			},
 		})
 
