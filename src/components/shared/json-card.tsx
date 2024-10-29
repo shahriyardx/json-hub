@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react"
-import Container from "@/components/shared/container"
+import React from "react"
 import { Badge } from "@/components/ui/badge"
 import { DownloadIcon, Link } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -85,7 +84,7 @@ const JsonCard = ({ json, onDownload }: Props) => {
 						variant="outline"
 						onClick={() => {
 							window.navigator.clipboard.writeText(
-								`${window.location.origin}/api/json/${json.id}`,
+								`${window.location.origin}/download/${json.id}`,
 							)
 							toast.success("Link copied to clipboard")
 						}}
