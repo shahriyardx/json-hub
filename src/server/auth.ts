@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
 			if (account && user) {
 				const response = await fetch(`https://api.github.com/user/${token.sub}`)
 				const data = await response.json()
-				console.log(token.sub)
+
 				if (token.sub === "40076722") {
 					token.isAdmin = true
 				}

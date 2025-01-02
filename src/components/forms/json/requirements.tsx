@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useFieldArray, type UseFormReturn } from "react-hook-form"
 import {
 	FormControl,
@@ -12,6 +12,8 @@ import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import SubRequirements from "./sub-requirements"
 import type { AssignmentJSON } from "."
+import RequirementMark from "./requirement-mark"
+import { marksContext, type MarksContextProps } from "@/context/marks-context"
 
 type Props = {
 	form: UseFormReturn<AssignmentJSON>
@@ -19,6 +21,7 @@ type Props = {
 }
 
 const Requirements = ({ form, sectionIndex }: Props) => {
+	const { removeReq } = useContext(marksContext) as MarksContextProps
 	const { fields, append, remove, swap } = useFieldArray({
 		control: form.control,
 		name: `sections.${sectionIndex}.requirements`,
@@ -32,7 +35,10 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 					<div key={req.id}>
 						<div className="rounded-md border p-5 relative bg-secondary/20 group/req">
 							<Button
-								onClick={() => remove(index)}
+								onClick={() => {
+									remove(index)
+									removeReq(`sections.${sectionIndex}.requirements.${index}`)
+								}}
 								size="icon"
 								variant="destructive"
 								type="button"
@@ -77,18 +83,10 @@ const Requirements = ({ form, sectionIndex }: Props) => {
 										)}
 									/>
 
-									<FormField
-										control={form.control}
-										name={`sections.${sectionIndex}.requirements.${index}.data.number`}
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Marks</FormLabel>
-												<FormControl>
-													<Input type="number" placeholder="Marks" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
+									<RequirementMark
+										form={form}
+										sectionIndex={sectionIndex}
+										index={index}
 									/>
 
 									<FormField

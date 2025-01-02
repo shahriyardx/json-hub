@@ -7,17 +7,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Container from "@/components/shared/container"
 import JSONForm from "@/components/forms/json"
 import { getJsonData, loadJson } from "@/utils/json"
-
-
+import { TotalMarksProvider } from "@/context/marks-context"
 
 const CreateJson = () => {
-	
-
 	return (
 		<MainLayout>
 			<Container className="my-10">
-				
-				<JSONForm />
+				<TotalMarksProvider>
+					<JSONForm />
+				</TotalMarksProvider>
 			</Container>
 		</MainLayout>
 	)

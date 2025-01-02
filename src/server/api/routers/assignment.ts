@@ -52,7 +52,6 @@ export const assignmentRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			console.log(input)
 			await ctx.db.assignment.delete({
 				where: {
 					id: input.id,

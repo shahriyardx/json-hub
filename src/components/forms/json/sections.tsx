@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import type { AssignmentJSON } from "."
 import { useFieldArray, type UseFormReturn } from "react-hook-form"
 import {
@@ -12,12 +12,14 @@ import { Input } from "@/components/ui/input"
 import Requirements from "./requirements"
 import { Button } from "@/components/ui/button"
 import { Trash } from "lucide-react"
+import { marksContext, type MarksContextProps } from "@/context/marks-context"
 
 type Props = {
 	form: UseFormReturn<AssignmentJSON>
 }
 
 const Sections = ({ form }: Props) => {
+	const { removeReq } = useContext(marksContext) as MarksContextProps
 	const { fields, append, remove } = useFieldArray({
 		control: form.control,
 		name: "sections",
@@ -49,7 +51,10 @@ const Sections = ({ form }: Props) => {
 						className="rounded-md border p-5 relative group"
 					>
 						<Button
-							onClick={() => remove(index)}
+							onClick={() => {
+								remove(index)
+								removeReq(`sections.${index}`)
+							}}
 							size="icon"
 							variant="destructive"
 							className="absolute top-0 right-0 rounded-md rounded-bl-full hidden group-hover:flex"

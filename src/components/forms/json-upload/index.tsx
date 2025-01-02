@@ -54,8 +54,6 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 				form.setValue("assignment", isAvailable.id)
 			}
 		}
-
-		console.log("Rerendering")
 	}, [batch, form.setValue, availableAssignments, form.getValues])
 
 	return (
@@ -85,7 +83,6 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((values) => {
-						console.log(values)
 						submitHandler(values)
 					})}
 				>

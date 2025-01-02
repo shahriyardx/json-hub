@@ -49,7 +49,6 @@ export const batchRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			console.log(input)
 			await ctx.db.batch.delete({
 				where: {
 					id: input.id,

@@ -64,7 +64,6 @@ export const assignmentJsonRouter = createTRPCRouter({
 			return data
 		}),
 	my: protectedProcedure.query(async ({ ctx }) => {
-		console.log(ctx.session.user.id)
 		const data = await ctx.db.assignmentJson.findMany({
 			where: { userId: ctx.session.user.id },
 			include: {

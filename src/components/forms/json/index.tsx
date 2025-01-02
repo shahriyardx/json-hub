@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useContext, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { Form, FormMessage } from "@/components/ui/form"
 import Sections from "./sections"
@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { download, getJsonData, loadJson, toLegacy } from "@/utils/json"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
+import { marksContext, type MarksContextProps } from "@/context/marks-context"
 
 export const jsonSchema = z.object({
 	highestMark: z.coerce.number().default(60),
@@ -52,6 +52,9 @@ export const jsonSchema = z.object({
 export type AssignmentJSON = z.infer<typeof jsonSchema>
 
 const JSONForm = () => {
+	const { setRequirements, marks } = useContext(
+		marksContext,
+	) as MarksContextProps
 	const downloadJson = (data: AssignmentJSON) => {
 		if (data.include) {
 			download(toLegacy(data), "")
@@ -92,6 +95,21 @@ const JSONForm = () => {
 								const validated_data = jsonSchema.safeParse(jsonData)
 
 								if (validated_data.success) {
+									const obj: Record<string, number> = {}
+									validated_data.data.sections.forEach(
+										(section, sectionIndex) => {
+											section.requirements.forEach((req, reqIndex) => {
+												obj[
+													`sections.${sectionIndex}.requirements.${reqIndex}`
+												] = req.data.number
+											})
+										},
+									)
+
+									setTimeout(() => {
+										setRequirements(obj)
+									}, 500) // Yeah! Weired. But it works
+
 									form.reset(validated_data.data)
 								}
 							},
@@ -104,7 +122,11 @@ const JSONForm = () => {
 				<form onSubmit={form.handleSubmit(downloadJson)} className="space-y-5">
 					<Sections form={form} />
 
-					<div className="grid grid-cols-2 gap-5">
+					<div className="whitespace-nowrap">
+						<span className="text-zinc-400">Marks Added :</span> {marks}
+					</div>
+
+					<div className="grid grid-cols-2 gap-5 w-full">
 						<FormField
 							control={form.control}
 							name="highestMark"
@@ -144,7 +166,6 @@ const JSONForm = () => {
 					</div>
 				</form>
 			</Form>
-
 			<div className="flex gap-2 mt-5">
 				<Button type="button" onClick={form.handleSubmit(downloadJson)}>
 					Downlaod
