@@ -27,7 +27,7 @@ const RequirementMark = ({ form, sectionIndex, index }: Props) => {
 		if (watcher) {
 			addReqs(
 				`sections.${sectionIndex}.requirements.${index}`,
-				Number.parseInt(String(watcher)),
+				Number.parseFloat(String(watcher)),
 			)
 		} else {
 			removeReq(`sections.${sectionIndex}.requirements.${index}`)
