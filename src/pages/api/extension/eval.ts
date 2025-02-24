@@ -36,7 +36,7 @@ export default async function handler(
 	} catch {
 		return res.json({
 			feedback:
-				"<b>There is a syntax error in your code. Please fix that and recheck</b>",
+				"<strong>There is a syntax error in your code. Please fix that and recheck</strong>",
 			marks: 0,
 		})
 	}
@@ -72,7 +72,7 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 	let gainedMarks = 0
 	if (!func)
 		return {
-			feedback: `<b>${fn.name}</b>: function not found. Please check if the spelling is correct`,
+			feedback: `<strong>${fn.name}</strong>: function not found. Please check if the spelling is correct`,
 			gainedMarks,
 		}
 
@@ -89,7 +89,7 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 			output = Array.isArray(tc.input) ? func(...tc.input) : func(tc.input)
 		} catch (err) {
 			return {
-				feedback: `<b>${fn.name}</b>: Error occured while executing this function. Please fix your code`,
+				feedback: `<strong>${fn.name}</strong>: Error occured while executing this function. Please fix your code`,
 				gainedMarks,
 			}
 		}
@@ -115,12 +115,19 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 		if (tc.type === "validation") {
 			if (typeof tc.output !== typeof output) {
 				validationPassed = false
-				failedTestCase = { tc, output }
+				failedTestCase = {
+					tc: {
+						...tc,
+						input: JSON.stringify(tc.input),
+						output: JSON.stringify(tc.output),
+					},
+					output,
+				}
 			}
 		}
 	})
 
-	let finalFeedback = ''
+	let finalFeedback = ""
 	const feedbacks = []
 
 	if (allTestCasesPassed) {
@@ -153,7 +160,7 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 		)
 	}
 
-	finalFeedback += `<b>${fn.name}</b>: (${gainedMarks} Marks)\n${feedbacks.join("\n")}\n`
+	finalFeedback += `<strong>${fn.name}</strong>: (${gainedMarks} Marks)\n${feedbacks.join("\n")}\n`
 
 	return {
 		feedback: finalFeedback,
