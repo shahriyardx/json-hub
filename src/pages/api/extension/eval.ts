@@ -156,7 +156,7 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 	if (failedTestCase) {
 		const { tc, output } = failedTestCase as { tc: Tc; output: any }
 		feedbacks.push(
-			`\t └ Failed test case -> \n\t\t${bold("├ Input:")} ${tc.input}\n\t\t${bold("├ Expected Output:")} ${tc.output}\n\t\t${bold("└ Output:")} ${output}`,
+			`\t └ Failed test case -> \n\t\t${bold("├ Input:")} ${tc.input}\n\t\t${bold("├ Expected Output:")} ${tc.output}\n\t\t${bold("└ Output:")} ${JSON.stringify(output)}`,
 		)
 	}
 
