@@ -15,7 +15,7 @@ type JsonData = {
 	functions: JsonFunction[]
 }
 
-const bold = (text: string) => `<b>${text}</b>`
+const bold = (text: string) => `<strong>${text}</strong>`
 
 export default async function handler(
 	req: NextApiRequest,
