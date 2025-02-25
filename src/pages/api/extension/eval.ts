@@ -132,31 +132,31 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 
 	if (allTestCasesPassed) {
 		gainedMarks += 10
-		feedbacks.push(`\t ├ 🏆 Nice, ${fn.name} is working perfectly!`)
+		feedbacks.push(`‎  ├ 🏆 Nice, ${fn.name} is working perfectly!`)
 	} else {
 		if (testCasesPassed > 0) {
 			gainedMarks += 3
 			feedbacks.push(
-				"\t ├ 😞 Good job! But need improvement! Partial marks given",
+				"‎  ├ 😞 Good job! But need improvement! Partial marks given",
 			)
 		} else {
-			feedbacks.push("\t ├ ❌ Wrong output.")
+			feedbacks.push("‎  ├ ❌ Wrong output.")
 		}
 	}
 
 	if (validationPassed) {
 		gainedMarks += 2
 		feedbacks.push(
-			`\t ${failedTestCase ? "├" : "└"} You got bonus mark for validation.`,
+			`‎  ${failedTestCase ? "├" : "└"} You got bonus mark for validation.`,
 		)
 	} else {
-		feedbacks.push(`\t ${failedTestCase ? "├" : "└"} Validation not working.`)
+		feedbacks.push(`‎  ${failedTestCase ? "├" : "└"} Validation not working.`)
 	}
 
 	if (failedTestCase) {
 		const { tc, output } = failedTestCase as { tc: Tc; output: any }
 		feedbacks.push(
-			`\t └ Failed test case -> \n\t\t${bold("├ Input:")} ${tc.input}\n\t\t${bold("├ Expected Output:")} ${tc.output}\n\t\t${bold("└ Output:")} ${JSON.stringify(output)}`,
+			`‎  └ Failed test case -> \n‎ ‎ ${bold("├ Input:")} ${tc.input}\n‎ ‎ ${bold("├ Expected Output:")} ${tc.output}\n‎ ‎ ${bold("└ Output:")} ${JSON.stringify(output)}`,
 		)
 	}
 
