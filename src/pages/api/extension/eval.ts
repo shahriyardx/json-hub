@@ -61,6 +61,7 @@ export default async function handler(
 	for (const fn of jsonData.functions) {
 		const func = functions[fn.name]
 		const funcFeedback = validateFunction(fn, func)
+
 		feedback += `${funcFeedback.feedback}\n`
 		totalMarks += funcFeedback.gainedMarks
 	}
@@ -132,35 +133,35 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 
 	if (allTestCasesPassed) {
 		gainedMarks += 10
-		feedbacks.push(`‎  ├ 🏆 Nice, ${fn.name} is working perfectly!`)
+		feedbacks.push(`‎ ‎ ├ 🏆 Nice, ${fn.name} is working perfectly!`)
 	} else {
 		if (testCasesPassed > 0) {
 			gainedMarks += 3
 			feedbacks.push(
-				"‎  ├ 😞 Good job! But need improvement! Partial marks given",
+				"‎ ‎ ├ 😞 Good job! But need improvement! Partial marks given",
 			)
 		} else {
-			feedbacks.push("‎  ├ ❌ Wrong output.")
+			feedbacks.push("‎ ‎ ├ ❌ Wrong output.")
 		}
 	}
 
 	if (validationPassed) {
 		gainedMarks += 2
 		feedbacks.push(
-			`‎  ${failedTestCase ? "├" : "└"} You got bonus mark for validation.`,
+			`‎ ‎ ${failedTestCase ? "├" : "└"} You got bonus mark for validation.`,
 		)
 	} else {
-		feedbacks.push(`‎  ${failedTestCase ? "├" : "└"} Validation not working.`)
+		feedbacks.push(`‎ ‎ ${failedTestCase ? "├" : "└"} Validation not working.`)
 	}
 
 	if (failedTestCase) {
 		const { tc, output } = failedTestCase as { tc: Tc; output: any }
 		feedbacks.push(
-			`‎  └ Failed test case -> \n‎ ‎ ${bold("├ Input:")} ${tc.input}\n‎ ‎ ${bold("├ Expected Output:")} ${tc.output}\n‎ ‎ ${bold("└ Output:")} ${JSON.stringify(output)}`,
+			`‎ ‎ └ Failed test case -> \n‎ ‎ ‎ ‎ ${bold("├ Input:")} ${tc.input}\n‎ ‎ ‎ ‎ ${bold("├ Expected Output:")} ${tc.output}\n‎ ‎ ‎ ‎ ${bold("└ Output:")} ${JSON.stringify(output)}`,
 		)
 	}
 
-	finalFeedback += `<strong>${fn.name}</strong>: (${gainedMarks} Marks)\n${feedbacks.join("\n")}\n`
+	finalFeedback += `<strong>${fn.name}</strong>:\n${feedbacks.join("\n")}\n`
 
 	return {
 		feedback: finalFeedback,
