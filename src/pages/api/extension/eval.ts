@@ -69,6 +69,35 @@ export default async function handler(
 	return res.json({ feedback, totalMarks })
 }
 
+const checkOutput = (output: any, tcOutput: any) => {
+	console.log(output, tcOutput)
+	if (typeof tcOutput === "object" && !Array.isArray(tcOutput)) {
+		if ("matchType" in tcOutput) {
+			if (tcOutput.matchType === "instance") {
+				return (
+					// biome-ignore lint/suspicious/useValidTypeof: valid ofc
+					typeof output === tcOutput.value
+				)
+			}
+
+			if (tcOutput.matchType === "includes") {
+				return output.toLowerCase().includes(tcOutput.value.toLowerCase())
+			}
+
+			if (tcOutput.matchType === "range") {
+				return output >= tcOutput.value[0] && output <= tcOutput.value[1]
+			}
+		}
+	}
+
+	try {
+		assert.deepStrictEqual(output, tcOutput)
+		return true
+	} catch {
+		return false
+	}
+}
+
 const validateFunction = (fn: JsonFunction, func: any) => {
 	let gainedMarks = 0
 	if (!func)
@@ -96,35 +125,32 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 		}
 
 		// Check if correct
-		if (tc.type === "output") {
-			try {
-				assert.deepStrictEqual(output, tc.output)
-				testCasesPassed += 1
-			} catch {
-				allTestCasesPassed = false
-				failedTestCase = {
-					tc: {
-						...tc,
-						input: JSON.stringify(tc.input),
-						output: JSON.stringify(tc.output),
-					},
-					output,
-				}
+
+		const isCorrect = checkOutput(output, tc.output)
+
+		if (isCorrect) {
+			testCasesPassed += 1
+		} else {
+			failedTestCase = {
+				tc: {
+					...tc,
+					input: JSON.stringify(tc.input),
+					output: tc.output.example
+						? JSON.stringify(tc.output.example)
+						: tc.output.value
+							? JSON.stringify(tc.output.value)
+							: JSON.stringify(tc.output),
+				},
+				output,
 			}
 		}
 
-		if (tc.type === "validation") {
-			if (typeof tc.output !== typeof output) {
-				validationPassed = false
-				failedTestCase = {
-					tc: {
-						...tc,
-						input: JSON.stringify(tc.input),
-						output: JSON.stringify(tc.output),
-					},
-					output,
-				}
-			}
+		if (tc.type === "output" && !isCorrect) {
+			allTestCasesPassed = false
+		}
+
+		if (tc.type === "validation" && !isCorrect) {
+			validationPassed = false
 		}
 	})
 
@@ -135,8 +161,8 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 		gainedMarks += 10
 		feedbacks.push(`‎ ‎ ├ 🏆 Nice, ${fn.name} is working perfectly!`)
 	} else {
-		if (testCasesPassed > 0) {
-			gainedMarks += 3
+		if (testCasesPassed >= 2) {
+			gainedMarks += 4
 			feedbacks.push(
 				"‎ ‎ ├ 😞 Good job! But need improvement! Partial marks given",
 			)
@@ -157,7 +183,7 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 	if (failedTestCase) {
 		const { tc, output } = failedTestCase as { tc: Tc; output: any }
 		feedbacks.push(
-			`‎ ‎ └ Failed test case -> \n‎ ‎ ‎ ‎ ${bold("├ Input:")} ${tc.input}\n‎ ‎ ‎ ‎ ${bold("├ Expected Output:")} ${tc.output}\n‎ ‎ ‎ ‎ ${bold("└ Output:")} ${JSON.stringify(output)}`,
+			`‎ ‎ └ ${bold("<u style='color: red;'>Failed test case</u>")} \n‎ ‎ ‎ ‎ ${bold("├ Input:")} ${tc.input}\n‎ ‎ ‎ ‎ ${bold("├ Expected Output:")} ${tc.output}\n‎ ‎ ‎ ‎ ${bold("└ Your Output:")} ${JSON.stringify(output)}`,
 		)
 	}
 
