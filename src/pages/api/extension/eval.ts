@@ -81,6 +81,10 @@ const checkOutput = (output: any, tcOutput: any) => {
 			}
 
 			if (tcOutput.matchType === "includes") {
+				if (Array.isArray(tcOutput)) {
+					return tcOutput.includes(output)
+				}
+
 				return output.toLowerCase().includes(tcOutput.value.toLowerCase())
 			}
 
