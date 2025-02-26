@@ -25,7 +25,7 @@ const config = {
 			},
 		]
 	},
-	reactStrictMode: true,
+	reactStrictMode: false,
 	modularizeImports: {
 		"@icons-pack/react-simple-icons": {
 			transform: "@icons-pack/react-simple-icons/{{member}}",

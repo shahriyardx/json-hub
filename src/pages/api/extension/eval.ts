@@ -3,6 +3,11 @@ import * as acorn from "acorn"
 import * as walker from "acorn-walk"
 import assert from "node:assert"
 
+const emptySpace = (num?: number) =>
+	Array(num ?? 1)
+		.fill(" ")
+		.join("")
+
 type Tc = { input: any[]; output: any; type: "output" | "validation" }
 
 type JsonFunction = {
@@ -70,7 +75,6 @@ export default async function handler(
 }
 
 const checkOutput = (output: any, tcOutput: any) => {
-	console.log(output, tcOutput)
 	if (typeof tcOutput === "object" && !Array.isArray(tcOutput)) {
 		if ("matchType" in tcOutput) {
 			if (tcOutput.matchType === "instance") {
@@ -163,31 +167,38 @@ const validateFunction = (fn: JsonFunction, func: any) => {
 
 	if (allTestCasesPassed) {
 		gainedMarks += 10
-		feedbacks.push(`‎ ‎ ├ 🏆 Nice, ${fn.name} is working perfectly!`)
+		feedbacks.push(
+			`${emptySpace()} ├ 🏆 Nice, ${fn.name} is working perfectly!`,
+		)
 	} else {
 		if (testCasesPassed >= 2) {
 			gainedMarks += 4
 			feedbacks.push(
-				"‎ ‎ ├ 😞 Good job! But need improvement! Partial marks given",
+				`${emptySpace()} ├ 😞 Good job! But need improvement! Partial marks given`,
 			)
 		} else {
-			feedbacks.push("‎ ‎ ├ ❌ Wrong output.")
+			feedbacks.push(`${emptySpace()} ├ ❌ Wrong output.`)
 		}
 	}
 
 	if (validationPassed) {
 		gainedMarks += 2
 		feedbacks.push(
-			`‎ ‎ ${failedTestCase ? "├" : "└"} You got bonus mark for validation.`,
+			`${emptySpace()} ${failedTestCase ? "├" : "└"} 🎉 You got bonus mark for validation.`,
 		)
 	} else {
-		feedbacks.push(`‎ ‎ ${failedTestCase ? "├" : "└"} Validation not working.`)
+		feedbacks.push(
+			`${emptySpace()} ${failedTestCase ? "├" : "└"} 😞 Validation not working.`,
+		)
 	}
 
 	if (failedTestCase) {
 		const { tc, output } = failedTestCase as { tc: Tc; output: any }
 		feedbacks.push(
-			`‎ ‎ └ ${bold("<u style='color: red;'>Failed test case</u>")} \n‎ ‎ ‎ ‎ ${bold("├ Input:")} ${tc.input}\n‎ ‎ ‎ ‎ ${bold("├ Expected Output:")} ${tc.output}\n‎ ‎ ‎ ‎ ${bold("└ Your Output:")} ${JSON.stringify(output)}`,
+			`${emptySpace()} └ ${bold("<u style='color: red;'>Failed test case</u>")} \n` +
+				`${emptySpace(2)} ${bold("├ Input:")} ${tc.input}\n` +
+				`${emptySpace(2)} ${bold("├ Expected Output:")} ${tc.output}\n` +
+				`${emptySpace(2)} ${bold("└ Your Output:")} ${JSON.stringify(output)}`,
 		)
 	}
 
