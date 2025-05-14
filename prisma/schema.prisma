@@ -17,6 +17,15 @@ model Batch {
     createdAt      DateTime         @default(now())
     updatedAt      DateTime         @updatedAt
     Assignment     Assignment[]
+    jsons          JsonData[]
+}
+
+model Assignments {
+    id             String     @id @default(cuid())
+    name           String
+    AssignmentJson JsonData[]
+    createdAt      DateTime   @default(now())
+    updatedAt      DateTime   @updatedAt
 }
 
 model Assignment {
@@ -36,6 +45,7 @@ model User {
     image String
 
     AssignmentJson AssignmentJson[]
+    JsonData       JsonData[]
 }
 
 model AssignmentJson {
@@ -52,4 +62,20 @@ model AssignmentJson {
     batch      Batch      @relation(fields: [batchId], references: [id], onDelete: Cascade)
     assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
     user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model JsonData {
+    id        String   @id @default(cuid())
+    batchId   String
+    userId    String
+    category  String?
+    data      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    downloads Int      @default(0)
+
+    batch        Batch       @relation(fields: [batchId], references: [id], onDelete: Cascade)
+    user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    assignment   Assignments @relation(fields: [assignmentId], references: [id])
+    assignmentId String
 }
