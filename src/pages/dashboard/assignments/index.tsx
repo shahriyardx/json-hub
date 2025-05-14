@@ -19,13 +19,6 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { api } from "@/utils/api"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -40,7 +33,7 @@ import {
 	getFilteredRowModel,
 	useReactTable,
 } from "@tanstack/react-table"
-import type { Assignment, Assignments, Batch } from "@prisma/client"
+import type { Assignments } from "@prisma/client"
 import { DataTable } from "@/components/ui/data-table"
 
 export const assignmentScheama = z.object({

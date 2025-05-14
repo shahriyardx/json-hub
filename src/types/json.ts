@@ -1,10 +1,4 @@
-import type {
-	Assignment,
-	AssignmentJson,
-	Assignments,
-	Batch,
-	User,
-} from "@prisma/client"
+import type { Assignments, Batch, JsonData, User } from "@prisma/client"
 
 export type BaseRequirement = {
 	description: string
@@ -29,7 +23,7 @@ export type JsonForm = {
 	include: boolean
 }
 
-export type JsonResponse = AssignmentJson & {
+export type JsonResponse = JsonData & {
 	batch: Batch
 	assignment: Assignments
 	user: User
