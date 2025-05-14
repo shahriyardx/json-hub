@@ -18,15 +18,11 @@ const Homepage = () => {
 	const [assignment, setAssignment] = useState<string | undefined>("")
 
 	const { data: batches } = api.batch.all.useQuery()
+	const { data: assignments } = api.assignment.all.useQuery()
 	const { data, refetch, isLoading } = api.assignmentJson.all.useQuery({
 		batch,
 		assignment,
 	})
-
-	const availableAssignments =
-		batch && batches
-			? batches.find((b) => b.id === batch)?.Assignment || []
-			: []
 
 	useEffect(() => {
 		if (batch) {
@@ -60,7 +56,7 @@ const Homepage = () => {
 									<SelectValue placeholder="Select Assignment" />
 								</SelectTrigger>
 								<SelectContent>
-									{availableAssignments.sort(sortByName).map((aa) => (
+									{assignments?.map((aa) => (
 										<SelectItem key={aa.id} value={aa.id}>
 											{aa.name}
 										</SelectItem>

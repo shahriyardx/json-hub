@@ -10,7 +10,7 @@ export const assignmentJsonRouter = createTRPCRouter({
 	download: publicProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.assignmentJson.update({
+			await ctx.db.jsonData.update({
 				where: {
 					id: input.id,
 				},
@@ -22,7 +22,7 @@ export const assignmentJsonRouter = createTRPCRouter({
 	delete: protectedProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.assignmentJson.delete({
+			await ctx.db.jsonData.delete({
 				where: {
 					id: input.id,
 					userId: ctx.session.user.id,
@@ -49,7 +49,7 @@ export const assignmentJsonRouter = createTRPCRouter({
 			if (input.assignment) {
 				where.assignmentId = input.assignment
 			}
-			const data = await ctx.db.assignmentJson.findMany({
+			const data = await ctx.db.jsonData.findMany({
 				where: where,
 				include: {
 					user: true,
@@ -64,7 +64,7 @@ export const assignmentJsonRouter = createTRPCRouter({
 			return data
 		}),
 	my: protectedProcedure.query(async ({ ctx }) => {
-		const data = await ctx.db.assignmentJson.findMany({
+		const data = await ctx.db.jsonData.findMany({
 			where: { userId: ctx.session.user.id },
 			include: {
 				user: true,
@@ -81,7 +81,7 @@ export const assignmentJsonRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(JsonUploadSchema)
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.assignmentJson.create({
+			await ctx.db.jsonData.create({
 				data: {
 					data: input.data,
 					batchId: input.batch,
@@ -101,7 +101,7 @@ export const assignmentJsonRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const data = input.data
 
-			await ctx.db.assignmentJson.update({
+			await ctx.db.jsonData.update({
 				where: {
 					id: input.id,
 				},

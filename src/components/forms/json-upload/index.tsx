@@ -34,27 +34,7 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 	const importRef = useRef<HTMLInputElement>(null)
 
 	const { data: batches } = api.batch.all.useQuery()
-
-	const batch = form.watch("batch")
-	const availableAssignments =
-		batch && batches
-			? batches.find((b) => b.id === batch)?.Assignment || []
-			: []
-
-	useEffect(() => {
-		if (batch) {
-			const selectedAssignment = form.getValues("assignment")
-			const isAvailable = availableAssignments.find(
-				(a) => a.id === selectedAssignment,
-			)
-
-			if (!isAvailable) {
-				form.setValue("assignment", "")
-			} else {
-				form.setValue("assignment", isAvailable.id)
-			}
-		}
-	}, [batch, form.setValue, availableAssignments, form.getValues])
+	const { data: assignments } = api.assignment.all.useQuery()
 
 	return (
 		<div className={className}>
@@ -132,7 +112,7 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 										</FormControl>
 										<SelectContent>
 											<SelectContent>
-												{availableAssignments?.sort(sortByName).map((b) => (
+												{assignments?.map((b) => (
 													<SelectItem key={b.id} value={b.id}>
 														{b.name}
 													</SelectItem>

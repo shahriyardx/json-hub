@@ -9,8 +9,7 @@ import { z } from "zod"
 
 export const assignmentRouter = createTRPCRouter({
 	all: publicProcedure.query(async ({ ctx }) => {
-		const data = await ctx.db.assignment.findMany({
-			include: { batch: true },
+		const data = await ctx.db.assignments.findMany({
 			orderBy: {
 				createdAt: "desc",
 			},
@@ -20,10 +19,9 @@ export const assignmentRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(assignmentScheama)
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.assignment.create({
+			await ctx.db.assignments.create({
 				data: {
 					name: input.name,
-					batchId: input.batch,
 				},
 			})
 		}),
@@ -35,13 +33,12 @@ export const assignmentRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.assignment.update({
+			await ctx.db.assignments.update({
 				where: {
 					id: input.id,
 				},
 				data: {
 					name: input.data.name,
-					batchId: input.data.batch,
 				},
 			})
 		}),
@@ -52,7 +49,7 @@ export const assignmentRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.assignment.delete({
+			await ctx.db.assignments.delete({
 				where: {
 					id: input.id,
 				},

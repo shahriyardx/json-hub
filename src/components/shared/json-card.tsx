@@ -9,13 +9,13 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { download } from "@/utils/json"
 import { kebabCase } from "lodash"
 import { toast } from "sonner"
-import type { Assignment, AssignmentJson, Batch, User } from "@prisma/client"
+import type { Assignments, Batch, JsonData, User } from "@prisma/client"
 import { api } from "@/utils/api"
 
 type Props = {
-	json: AssignmentJson & {
+	json: JsonData & {
 		batch: Batch
-		assignment: Assignment
+		assignment: Assignments
 		user: User
 	}
 	onDownload: () => void

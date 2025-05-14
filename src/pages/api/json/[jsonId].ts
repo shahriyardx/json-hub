@@ -7,7 +7,7 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	const { jsonId } = req.query
-	const json = await db.assignmentJson.findFirst({
+	const json = await db.jsonData.findFirst({
 		where: {
 			id: jsonId as string,
 		},

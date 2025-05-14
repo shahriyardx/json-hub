@@ -6,7 +6,7 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	const { assignmentId } = req.query
-	const jsons = await db.assignmentJson.findMany({
+	const jsons = await db.jsonData.findMany({
 		where: {
 			assignmentId: assignmentId as string,
 		},

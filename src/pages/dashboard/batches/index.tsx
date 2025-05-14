@@ -34,7 +34,7 @@ import {
 	useReactTable,
 } from "@tanstack/react-table"
 import { DataTable } from "@/components/ui/data-table"
-import type { Assignment, Batch } from "@prisma/client"
+import type { Batch, JsonData } from "@prisma/client"
 
 export const batchScheama = z.object({
 	name: z.string().min(1),
@@ -65,15 +65,15 @@ const Bathces = () => {
 		},
 	})
 
-	const columns: ColumnDef<Batch & { Assignment: Assignment[] }>[] = [
+	const columns: ColumnDef<Batch & { jsons: Pick<JsonData, "id">[] }>[] = [
 		{
 			accessorKey: "name",
 			header: "Name",
 		},
 		{
-			header: "Assignments",
+			header: "JSON",
 			cell: ({ row }) => {
-				return <span>{row.original.Assignment.length}</span>
+				return <span>{row.original.jsons.length}</span>
 			},
 		},
 		{
@@ -109,7 +109,7 @@ const Bathces = () => {
 
 	const table = useReactTable({
 		columns,
-		data: batches?.sort(sortByName) ?? [],
+		data: batches ? batches : [],
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 	})

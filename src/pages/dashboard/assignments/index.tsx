@@ -40,28 +40,24 @@ import {
 	getFilteredRowModel,
 	useReactTable,
 } from "@tanstack/react-table"
-import type { Assignment, Batch } from "@prisma/client"
+import type { Assignment, Assignments, Batch } from "@prisma/client"
 import { DataTable } from "@/components/ui/data-table"
 
 export const assignmentScheama = z.object({
 	name: z.string().min(1),
-	batch: z.string(),
 })
 
 export type AssignmentData = z.infer<typeof assignmentScheama>
 
-const Assignments = () => {
+const AssignmentsPage = () => {
 	const form = useForm<AssignmentData>({
 		resolver: zodResolver(assignmentScheama),
 	})
 
-	const { data: batches } = api.batch.all.useQuery()
 	const { data: assignments, refetch } = api.assignment.all.useQuery()
 	const { mutate: createAssignment } = api.assignment.create.useMutation({
 		onSuccess: () => {
-			const values = form.getValues()
 			form.reset({
-				...values,
 				name: "",
 			})
 			toast.success("Assignment created")
@@ -76,20 +72,10 @@ const Assignments = () => {
 		},
 	})
 
-	const columns: ColumnDef<Assignment & { batch: Batch }>[] = [
+	const columns: ColumnDef<Assignments>[] = [
 		{
 			accessorKey: "name",
 			header: "Name",
-		},
-		{
-			accessorKey: "batchId",
-		},
-		{
-			accessorKey: "batch",
-			header: "Batch",
-			cell: ({ row }) => {
-				return row.original.batch.name
-			},
 		},
 		{
 			header: "Actions",
@@ -144,49 +130,19 @@ const Assignments = () => {
 						<form
 							onSubmit={form.handleSubmit((values) => createAssignment(values))}
 						>
-							<div className="grid grid-cols-2 gap-5">
-								<FormField
-									control={form.control}
-									name="batch"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Batch</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select batch" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{batches?.sort(sortByName).map((b) => (
-														<SelectItem key={b.id} value={b.id}>
-															{b.name}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-
-								<FormField
-									control={form.control}
-									name="name"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Assignment Name</FormLabel>
-											<FormControl>
-												<Input placeholder="Name" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</div>
+							<FormField
+								control={form.control}
+								name="name"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Assignment Name</FormLabel>
+										<FormControl>
+											<Input placeholder="Name" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
 							<Button className="mt-5">Create</Button>
 						</form>
@@ -196,31 +152,10 @@ const Assignments = () => {
 
 			<div className="mt-10">
 				<h4 className="text-xl font-bold">All Assignments</h4>
-				<Select
-					onValueChange={(val) => {
-						if (val === "all") {
-							table.getColumn("batchId")?.setFilterValue(undefined)
-						} else {
-							table.getColumn("batchId")?.setFilterValue(val)
-						}
-					}}
-				>
-					<SelectTrigger className="my-4">
-						<SelectValue placeholder="Select Batch" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">All</SelectItem>
-						{batches?.map((batch) => (
-							<SelectItem value={batch.id} key={batch.id}>
-								{batch.name}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
 				<DataTable table={table} />
 			</div>
 		</DashboardLayout>
 	)
 }
 
-export default Assignments
+export default AssignmentsPage

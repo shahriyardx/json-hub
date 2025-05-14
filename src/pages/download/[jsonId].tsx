@@ -35,7 +35,7 @@ const DashboardPage = ({ data }: { data: JsonUpload }) => {
 export default DashboardPage
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-	const jsonData = await db.assignmentJson.findFirst({
+	const jsonData = await db.jsonData.findFirst({
 		where: {
 			id: query.jsonId as string,
 		},
