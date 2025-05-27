@@ -11,13 +11,11 @@ datasource db {
 }
 
 model Batch {
-    id             String           @id @default(cuid())
-    name           String
-    AssignmentJson AssignmentJson[]
-    createdAt      DateTime         @default(now())
-    updatedAt      DateTime         @updatedAt
-    Assignment     Assignment[]
-    jsons          JsonData[]
+    id        String     @id @default(cuid())
+    name      String
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    jsons     JsonData[]
 }
 
 model Assignments {
@@ -28,40 +26,13 @@ model Assignments {
     updatedAt      DateTime   @updatedAt
 }
 
-model Assignment {
-    id             String           @id @default(cuid())
-    name           String
-    batch          Batch            @relation(fields: [batchId], references: [id], onDelete: Cascade)
-    AssignmentJson AssignmentJson[]
-    createdAt      DateTime         @default(now())
-    updatedAt      DateTime         @updatedAt
-    batchId        String
-}
-
 model User {
     id    String @id
     name  String
     email String
     image String
 
-    AssignmentJson AssignmentJson[]
-    JsonData       JsonData[]
-}
-
-model AssignmentJson {
-    id           String   @id @default(cuid())
-    batchId      String
-    assignmentId String
-    userId       String
-    category     String?
-    data         String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
-    downloads    Int      @default(0)
-
-    batch      Batch      @relation(fields: [batchId], references: [id], onDelete: Cascade)
-    assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-    user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    JsonData JsonData[]
 }
 
 model JsonData {
