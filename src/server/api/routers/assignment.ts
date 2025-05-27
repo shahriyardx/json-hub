@@ -11,7 +11,7 @@ export const assignmentRouter = createTRPCRouter({
 	all: publicProcedure.query(async ({ ctx }) => {
 		const data = await ctx.db.assignments.findMany({
 			orderBy: {
-				createdAt: "desc",
+				index: "asc",
 			},
 		})
 		return data
@@ -22,6 +22,7 @@ export const assignmentRouter = createTRPCRouter({
 			await ctx.db.assignments.create({
 				data: {
 					name: input.name,
+					index: input.index,
 				},
 			})
 		}),
@@ -37,9 +38,7 @@ export const assignmentRouter = createTRPCRouter({
 				where: {
 					id: input.id,
 				},
-				data: {
-					name: input.data.name,
-				},
+				data: input.data,
 			})
 		}),
 	delete: protectedProcedure

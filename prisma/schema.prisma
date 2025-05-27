@@ -21,6 +21,7 @@ model Batch {
 model Assignments {
     id             String     @id @default(cuid())
     name           String
+    index          Int        @default(1)
     AssignmentJson JsonData[]
     createdAt      DateTime   @default(now())
     updatedAt      DateTime   @updatedAt
