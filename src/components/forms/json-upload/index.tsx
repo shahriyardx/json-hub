@@ -111,7 +111,7 @@ const JsonUploadForm = ({ className, submitHandler, form, type }: Props) => {
 										</FormControl>
 										<SelectContent>
 											<SelectContent>
-												{assignments?.sort(sortByName).map((b) => (
+												{assignments?.map((b) => (
 													<SelectItem key={b.id} value={b.id}>
 														{b.name}
 													</SelectItem>
