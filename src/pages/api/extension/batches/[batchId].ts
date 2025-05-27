@@ -6,6 +6,9 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	const assignments = await db.assignments.findMany({
+		orderBy: {
+			index: "asc",
+		},
 		select: {
 			id: true,
 			name: true,

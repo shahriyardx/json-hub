@@ -56,7 +56,7 @@ const Homepage = () => {
 									<SelectValue placeholder="Select Assignment" />
 								</SelectTrigger>
 								<SelectContent>
-									{assignments?.sort(sortByName).map((aa) => (
+									{assignments?.map((aa) => (
 										<SelectItem key={aa.id} value={aa.id}>
 											{aa.name}
 										</SelectItem>
