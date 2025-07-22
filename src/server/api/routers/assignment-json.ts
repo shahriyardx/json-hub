@@ -78,6 +78,21 @@ export const assignmentJsonRouter = createTRPCRouter({
 
 		return data
 	}),
+	allAdmin: protectedProcedure.query(async ({ ctx }) => {
+		const data = await ctx.db.jsonData.findMany({
+			where: { userId: ctx.session.user.id },
+			include: {
+				user: true,
+				assignment: true,
+				batch: true,
+			},
+			orderBy: {
+				createdAt: "desc",
+			},
+		})
+
+		return data
+	}),
 	create: protectedProcedure
 		.input(JsonUploadSchema)
 		.mutation(async ({ ctx, input }) => {

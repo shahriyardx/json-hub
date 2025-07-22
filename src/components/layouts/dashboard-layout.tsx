@@ -64,6 +64,9 @@ const DashboardLayout = ({ children, title }: Props) => {
 							<SidebarLink href="/dashboard/jsons" Icon={Braces}>
 								My Json
 							</SidebarLink>
+							<SidebarLink href="/dashboard/jsons/all" Icon={Braces}>
+								All Json
+							</SidebarLink>
 							<SidebarLink href="/dashboard/jsons/create" Icon={Pen}>
 								Create Json
 							</SidebarLink>
