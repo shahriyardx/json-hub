@@ -63,6 +63,13 @@ const AllJson = () => {
       },
     },
     {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => {
+        return <span>{row.original.assignment.name}</span>
+      },
+    },
+    {
       header: "Actions",
       cell: ({ row }) => {
         return (
@@ -112,7 +119,7 @@ const AllJson = () => {
   })
 
   return (
-    <DashboardLayout title="My Json">
+    <DashboardLayout title="All Json">
       <div>
         <Select
           onValueChange={(val) => {
@@ -133,7 +140,7 @@ const AllJson = () => {
                 {batch.name}
               </SelectItem>
             ))}
-          </SelectContent>
+          </SelectContent> 
         </Select>
         <DataTable table={table} />
       </div>
