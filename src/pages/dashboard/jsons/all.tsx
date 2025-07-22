@@ -43,6 +43,8 @@ const AllJson = () => {
     },
   })
 
+  console.log(data)
+
   const columns: ColumnDef<JsonResponse>[] = [
     {
       accessorKey: "batch",
@@ -65,9 +67,6 @@ const AllJson = () => {
     {
       accessorKey: "category",
       header: "Category",
-      cell: ({ row }) => {
-        return <span>{row.original.assignment.name}</span>
-      },
     },
     {
       header: "Actions",
